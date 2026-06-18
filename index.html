@@ -114,16 +114,15 @@
         .calendar-dates span { display: flex; align-items: center; justify-content: center; height: 42px; width: 100%; position: relative; }
         .heart-date { position: relative; font-weight: 600; }
         .heart-date::before {
-    content: '♡';
+    content: '';
     position: absolute;
-    top: 50%; left: 50%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 3.5em;
-    color: transparent;
-    -webkit-text-stroke: 0.5px var(--terracotta);
-    -webkit-text-fill-color: transparent;
+    width: 2.8em;
+    height: 2.8em;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c67b5c' stroke-width='0.8'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E") no-repeat center / contain;
     z-index: 0;
-    line-height: 1;
 }
 
         .heart-date span { position: relative; z-index: 1; color: var(--dark); }
@@ -183,13 +182,17 @@
         .countdown-number { font-size: 2.4em; font-weight: 700; color: var(--terracotta); display: block; line-height: 1; }
         .countdown-label { font-family: 'Montserrat', sans-serif; font-size: 0.65em; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; display: block; }
 
+        /* По умолчанию скрыто (десктоп) */
+.timeline-vertical { display: none; }
+.tv-item { /* заглушка */ }
+        
         /* ── Мобильная адаптация (все правки) ── */
         @media (max-width: 600px) {
             .card { padding: 35px 20px; backdrop-filter: none; background: rgba(250,247,240,0.92); }
             .monogram .letter { font-size: 2.4em; }
             .monogram .ampersand { font-size: 1.8em; margin: 0 -4px; }
             .monogram::before { left: -28px; } .monogram::after { right: -28px; }
-            .hero-names-cursive { font-size: 2.6em; white-space: nowrap; }
+            .hero-names-cursive { font-size: 3.9em; white-space: nowrap; }
             .location-photos { height: 180px; }
             .location-photo:last-child { display: none; }           /* скрываем второе фото */
             .location-photo:first-child { clip-path: none; }        /* убираем скос */
@@ -201,9 +204,9 @@
             .calendar-grid { max-width: 260px; }
             .calendar-dates span { height: 38px; }
             .heart-date::before {
-    font-size: 3em;
-    -webkit-text-stroke: 0.4px var(--terracotta);
-    -webkit-text-fill-color: transparent;
+    width: 2.4em;
+    height: 2.4em;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c67b5c' stroke-width='0.8'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E") no-repeat center / contain;
 }
             .countdown { flex-wrap: nowrap; gap: 8px; }
             .countdown-item { min-width: auto; padding: 10px 8px; }
@@ -212,7 +215,73 @@
             .palette-circle { width: 32px; height: 32px; }
 
             /* Таймлайн крупнее */
-            .timeline-svg-container { transform: scale(1.25); transform-origin: top center; margin-bottom: 30px; overflow: visible; }
+           /* Скрываем SVG-кривую на мобильных */
+.timeline-svg-container { display: none; }
+
+/* Показываем вертикальный список */
+.timeline-vertical {
+    display: block;
+    text-align: left;
+    padding: 0 10px;
+    margin: 20px 0 10px;
+}
+
+.tv-item {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 24px;
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+/* Декоративная линия слева */
+.tv-item::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 8px;
+    bottom: -24px;
+    width: 2px;
+    background: var(--gold-light);
+    z-index: 0;
+}
+.tv-item:last-child::before { display: none; }
+
+/* Точка на линии */
+.tv-item::after {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--terracotta);
+    background: var(--cream);
+    z-index: 1;
+}
+
+.tv-time {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1.3em;
+    color: var(--dark);
+    margin-bottom: 2px;
+}
+
+.tv-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2em;
+    color: var(--text-dark);
+    font-style: italic;
+}
+
+.tv-desc span {
+    display: block;
+    font-style: normal;
+    font-size: 0.85em;
+    color: var(--text-muted);
+}
             .timeline-label { font-size: 1em; }
             .timeline-time { font-size: 1.1em; }
 
@@ -300,8 +369,27 @@
                         <text class="timeline-label" id="label4b" x="500" y="378" text-anchor="middle" font-size="0.65em">Завершение</text>
                     </svg>
                 </div>
+                 <!-- Вертикальный таймлайн для мобильных -->
+        <div class="timeline-vertical">
+            <div class="tv-item">
+                <div class="tv-time">13:00</div>
+                <div class="tv-desc">Церемония <span>в ЗАГСе</span></div>
             </div>
-        </section>
+            <div class="tv-item">
+                <div class="tv-time">16:00</div>
+                <div class="tv-desc">Сбор гостей <span>в ресторане</span></div>
+            </div>
+            <div class="tv-item">
+                <div class="tv-time">17:00</div>
+                <div class="tv-desc">Праздничный банкет</div>
+            </div>
+            <div class="tv-item">
+                <div class="tv-time">23:00</div>
+                <div class="tv-desc">Завершение</div>
+            </div>
+        </div>
+    </div>
+</section>
 
         <div class="garland-divider">
             <div class="garland-line"></div>
