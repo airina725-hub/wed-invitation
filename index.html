@@ -103,7 +103,10 @@
 
         .hero-date { font-family: 'Montserrat', sans-serif; font-size: 0.9em; letter-spacing: 3px; color: var(--terracotta); text-transform: uppercase; margin: 10px 0 5px; font-weight: 300; }
         .hero-subtitle { font-family: 'Montserrat', sans-serif; font-weight: 200; letter-spacing: 5px; text-transform: uppercase; color: var(--olive); font-size: 0.85em; }
+        /* Десктопные имена */
         .hero-names-cursive { font-family: 'Great Vibes', cursive; font-size: 4em; color: var(--dark); letter-spacing: 3px; margin-top: 12px; text-shadow: 0 2px 8px rgba(74,59,50,0.1); white-space: nowrap; }
+        /* Мобильные имена (по умолчанию скрыты) */
+        .hero-names-cursive-mobile { display: none; }
 
         /* Календарь */
         .calendar-mini { margin-top: 30px; font-family: 'Montserrat', sans-serif; color: var(--text-muted); }
@@ -114,17 +117,15 @@
         .calendar-dates span { display: flex; align-items: center; justify-content: center; height: 42px; width: 100%; position: relative; }
         .heart-date { position: relative; font-weight: 600; }
         .heart-date::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 2.8em;
-    height: 2.8em;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c67b5c' stroke-width='0.8'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E") no-repeat center / contain;
-    z-index: 0;
-}
-
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2.8em;
+            height: 2.8em;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c67b5c' stroke-width='0.8'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E") no-repeat center / contain;
+            z-index: 0;
+        }
         .heart-date span { position: relative; z-index: 1; color: var(--dark); }
 
         /* Лепестки */
@@ -144,6 +145,9 @@
         .timeline-label { font-family: 'Montserrat', sans-serif; font-size: 0.75em; fill: var(--text-muted); letter-spacing: 1px; opacity: 0; transition: opacity 0.6s ease; }
         .timeline-label.visible { opacity: 1; }
         .timeline-time { font-weight: 600; fill: var(--dark); font-size: 0.9em; }
+
+        /* Вертикальный таймлайн (по умолчанию скрыт) */
+        .timeline-vertical { display: none; }
 
         /* Локации */
         .locations-section { padding: 20px 0; }
@@ -182,19 +186,34 @@
         .countdown-number { font-size: 2.4em; font-weight: 700; color: var(--terracotta); display: block; line-height: 1; }
         .countdown-label { font-family: 'Montserrat', sans-serif; font-size: 0.65em; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; display: block; }
 
-        /* По умолчанию скрыто (десктоп) */
-.timeline-vertical { display: none; }
-        
-        /* ── Мобильная адаптация (все правки) ── */
+        /* ── Мобильная адаптация ── */
         @media (max-width: 600px) {
             .card { padding: 35px 20px; backdrop-filter: none; background: rgba(250,247,240,0.92); }
             .monogram .letter { font-size: 2.4em; }
             .monogram .ampersand { font-size: 1.8em; margin: 0 -4px; }
             .monogram::before { left: -28px; } .monogram::after { right: -28px; }
-            .hero-names-cursive { font-size: 3.9em; white-space: nowrap; }
+
+            /* Переключение имён */
+            .hero-names-cursive { display: none; }
+            .hero-names-cursive-mobile {
+                display: block;
+                font-family: 'Great Vibes', cursive;
+                font-size: 3.9em;
+                color: var(--dark);
+                text-shadow: 0 2px 8px rgba(74,59,50,0.1);
+                line-height: 1.2;
+                text-align: center;
+            }
+            .names-ampersand-mobile {
+                display: block;
+                font-size: 0.6em;
+                line-height: 0.8;
+                color: var(--terracotta);
+            }
+
             .location-photos { height: 180px; }
-            .location-photo:last-child { display: none; }           /* скрываем второе фото */
-            .location-photo:first-child { clip-path: none; }        /* убираем скос */
+            .location-photo:last-child { display: none; }
+            .location-photo:first-child { clip-path: none; }
             .location-info { padding: 18px 20px; }
             .location-name { font-size: 1.2em; }
             .fern-left, .fern-right { width: 70px; height: 140px; }
@@ -203,92 +222,80 @@
             .calendar-grid { max-width: 260px; }
             .calendar-dates span { height: 38px; }
             .heart-date::before {
-    width: 2.4em;
-    height: 2.4em;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c67b5c' stroke-width='0.8'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E") no-repeat center / contain;
-}
+                width: 2.4em;
+                height: 2.4em;
+                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c67b5c' stroke-width='0.8'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E") no-repeat center / contain;
+            }
             .countdown { flex-wrap: nowrap; gap: 8px; }
             .countdown-item { min-width: auto; padding: 10px 8px; }
             .countdown-number { font-size: 1.7em; }
             .palette { gap: 10px; }
             .palette-circle { width: 32px; height: 32px; }
 
-            /* Таймлайн крупнее */
-          /* Скрываем SVG-кривую на мобильных */
-.timeline-svg-container { display: none; }
+            /* Вертикальный таймлайн */
+            .timeline-svg-container { display: none; }
+            .timeline-vertical {
+                display: block;
+                position: relative;
+                padding-left: 30px;
+                margin: 30px 0 20px;
+                text-align: left;
+            }
+            .timeline-vertical::before {
+                content: '';
+                position: absolute;
+                left: 15px;
+                top: 10px;
+                bottom: 10px;
+                width: 2px;
+                background: var(--gold-light);
+            }
+            .tv-item {
+                position: relative;
+                margin-bottom: 28px;
+                opacity: 0;
+                transform: translateX(-20px);
+                transition: opacity 0.5s ease, transform 0.5s ease;
+            }
+            .tv-item.visible {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            /* Точка строго по центру линии */
+            .tv-item::before {
+                content: '';
+                position: absolute;
+                left: 9px;          /* 15px (линия) - 6px (половина ширины точки) */
+                top: 12px;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                border: 2px solid var(--terracotta);
+                background: var(--cream);
+                z-index: 2;
+            }
+            .tv-time {
+                font-family: 'Montserrat', sans-serif;
+                font-weight: 600;
+                font-size: 1.3em;
+                color: var(--dark);
+                margin-bottom: 2px;
+            }
+            .tv-desc {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 1.2em;
+                color: var(--text-dark);
+                font-style: italic;
+            }
+            .tv-desc span {
+                display: block;
+                font-style: normal;
+                font-size: 0.85em;
+                color: var(--text-muted);
+            }
 
-/* Вертикальный таймлайн */
-.timeline-vertical {
-    display: block;
-    position: relative;
-    padding-left: 30px;
-    margin: 30px 0 20px;
-    text-align: left;
-}
-
-/* Сплошная вертикальная линия */
-.timeline-vertical::before {
-    content: '';
-    position: absolute;
-    left: 15px;
-    top: 10px;
-    bottom: 10px;
-    width: 2px;
-    background: var(--gold-light);
-}
-
-/* Каждое событие */
-.tv-item {
-    position: relative;
-    margin-bottom: 28px;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.tv-item.visible {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* Точка на линии */
-.tv-item::before {
-    content: '';
-    position: absolute;
-    left: -21px;          /* 15px (линия) + 6px до центра точки */
-    top: 12px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid var(--terracotta);
-    background: var(--cream);
-    z-index: 2;
-}
-
-.tv-time {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 1.3em;
-    color: var(--dark);
-    margin-bottom: 2px;
-}
-
-.tv-desc {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2em;
-    color: var(--text-dark);
-    font-style: italic;
-}
-
-.tv-desc span {
-    display: block;
-    font-style: normal;
-    font-size: 0.85em;
-    color: var(--text-muted);
-}
             .timeline-label { font-size: 1em; }
             .timeline-time { font-size: 1.1em; }
-
-            /* Отключаем параллакс на мобильных */
             .parallax-flower { display: none; }
         }
     </style>
@@ -311,15 +318,14 @@
                 </div>
                 <div class="hero-date">30 июля 2026</div>
                 <p class="hero-subtitle">Приглашение на свадьбу</p>
-                <!-- Десктопная версия (одна строка) -->
-<div class="hero-names-cursive">Игорь и Ирина</div>
-
-<!-- Мобильная версия (три строки) -->
-<div class="hero-names-cursive-mobile">
-    Игорь
-    <span class="names-ampersand-mobile">И</span>
-    Ирина
-</div>
+                <!-- Десктопная версия -->
+                <div class="hero-names-cursive">Игорь и Ирина</div>
+                <!-- Мобильная версия -->
+                <div class="hero-names-cursive-mobile">
+                    Игорь
+                    <span class="names-ampersand-mobile">И</span>
+                    Ирина
+                </div>
                 <div class="branch-divider" id="branch1">
                     <svg viewBox="0 0 300 40">
                         <path class="branch-path" d="M10,20 Q40,5 60,20 Q80,35 100,20 Q120,5 140,20 Q160,35 180,20 Q200,5 220,20 Q240,35 260,20 Q280,5 290,20"/>
@@ -380,27 +386,27 @@
                         <text class="timeline-label" id="label4b" x="500" y="378" text-anchor="middle" font-size="0.65em">Завершение</text>
                     </svg>
                 </div>
-                 <!-- Вертикальный таймлайн для мобильных -->
-        <div class="timeline-vertical">
-            <div class="tv-item">
-                <div class="tv-time">13:00</div>
-                <div class="tv-desc">Церемония <span>в ЗАГСе</span></div>
+                <!-- Вертикальный таймлайн для мобильных -->
+                <div class="timeline-vertical">
+                    <div class="tv-item">
+                        <div class="tv-time">13:00</div>
+                        <div class="tv-desc">Церемония <span>в ЗАГСе</span></div>
+                    </div>
+                    <div class="tv-item">
+                        <div class="tv-time">16:00</div>
+                        <div class="tv-desc">Сбор гостей <span>в ресторане</span></div>
+                    </div>
+                    <div class="tv-item">
+                        <div class="tv-time">17:00</div>
+                        <div class="tv-desc">Праздничный банкет</div>
+                    </div>
+                    <div class="tv-item">
+                        <div class="tv-time">23:00</div>
+                        <div class="tv-desc">Завершение</div>
+                    </div>
+                </div>
             </div>
-            <div class="tv-item">
-                <div class="tv-time">16:00</div>
-                <div class="tv-desc">Сбор гостей <span>в ресторане</span></div>
-            </div>
-            <div class="tv-item">
-                <div class="tv-time">17:00</div>
-                <div class="tv-desc">Праздничный банкет</div>
-            </div>
-            <div class="tv-item">
-                <div class="tv-time">23:00</div>
-                <div class="tv-desc">Завершение</div>
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
 
         <div class="garland-divider">
             <div class="garland-line"></div>
@@ -558,17 +564,17 @@
         }, { rootMargin: '0px 0px -40px 0px', threshold: 0.1 });
         sections.forEach(s => observer.observe(s));
         branchDividers.forEach(d => observer.observe(d));
-        // Анимация вертикального таймлайна при прокрутке
-const tvItems = document.querySelectorAll('.tv-item');
-const tvObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
-    });
-}, { threshold: 0.6 });
 
-tvItems.forEach(item => tvObserver.observe(item));
+        // Анимация вертикального таймлайна при прокрутке
+        const tvItems = document.querySelectorAll('.tv-item');
+        const tvObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.6 });
+        tvItems.forEach(item => tvObserver.observe(item));
 
         function animateTimeline() {
             const curve = document.getElementById('timelineCurve');
