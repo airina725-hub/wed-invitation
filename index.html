@@ -388,7 +388,7 @@
             stroke-width: 2.5;
             stroke-dasharray: 1500;
             stroke-dashoffset: 1500;
-            transition: stroke-dashoffset 2.5s ease;
+            transition: stroke-dashoffset 1.5s ease; /* ускорено */
         }
         .timeline-curve.animated { stroke-dashoffset: 0; }
         .timeline-dot {
@@ -590,9 +590,14 @@
             display: block;
         }
 
-        /* ── Адаптив ── */
+        /* ── Мобильная адаптация (улучшена) ── */
         @media (max-width: 600px) {
-            .card { padding: 35px 20px; }
+            .card {
+                padding: 35px 20px;
+                /* убираем дорогой backdrop-filter на мобильных */
+                backdrop-filter: none;
+                background: rgba(250, 247, 240, 0.92);
+            }
             .monogram .letter { font-size: 2.4em; }
             .monogram .ampersand { font-size: 1.8em; margin: 0 -4px; }
             .monogram::before { left: -28px; }
@@ -601,7 +606,9 @@
             .location-photos { height: 160px; }
             .location-info { padding: 18px 20px; }
             .location-name { font-size: 1.2em; }
-            .fern-left, .fern-right { width: 70px; height: 140px; }
+            .fern-left, .fern-right {
+                width: 70px; height: 140px;
+            }
             .fern-left { left: -50px; }
             .fern-right { right: -50px; }
             .branch-divider svg { max-width: 280px; }
@@ -613,6 +620,37 @@
             .countdown-number { font-size: 1.8em; }
             .palette { gap: 10px; }
             .palette-circle { width: 32px; height: 32px; }
+
+            /* Таймлайн крупнее */
+            .timeline-svg-container {
+                max-width: 100%;
+            }
+            .timeline-svg {
+                /* Увеличиваем масштаб за счёт изменения viewBox? 
+                   Но viewBox задан в HTML. Проще увеличить шрифты и отступы.
+                   Переопределим метки */
+            }
+            .timeline-label {
+                font-size: 0.9em; /* было 0.75em */
+            }
+            .timeline-time {
+                font-size: 1em;
+            }
+            .timeline-dot {
+                r: 10; /* Нельзя изменить атрибут через CSS, но мы изменим в HTML ниже */
+            }
+            /* Заменим атрибуты r для точек через селектор, но проще задать в HTML размеры через CSS переменные или напрямую.
+               Я добавлю новые стили для точек на мобильных */
+            .timeline-svg .timeline-dot {
+                r: 10px; /* Не сработает, т.к. это атрибут. Сделаем через JavaScript или просто продублируем в HTML с размерами. 
+                   Обойдёмся увеличением stroke-width */
+                stroke-width: 3;
+            }
+            /* Отключаем параллакс на мобильных */
+            .parallax-flower {
+                display: none;
+            }
+            /* Снижаем количество лепестков (в JS) */
         }
     </style>
 </head>
@@ -676,7 +714,7 @@
             </svg>
         </div>
 
-        <!-- ═══ ТАЙМЛАЙН ═══ -->
+        <!-- ═══ ТАЙМЛАЙН (улучшен для мобильных) ═══ -->
         <section class="section timeline-section" id="section2">
             <div class="card">
                 <div class="fern-left"></div>
@@ -686,21 +724,25 @@
                     <svg class="timeline-svg" viewBox="0 0 550 380" id="timelineSvg">
                         <path class="timeline-curve" id="timelineCurve"
                         d="M40,40 C120,40 100,120 180,140 C260,160 280,240 360,260 C440,280 420,340 500,340"/>
-                        <circle class="timeline-dot" id="dot1" cx="40" cy="40" r="8"/>
-                        <text class="timeline-label timeline-time" id="label1a" x="40" y="25" text-anchor="middle">13:00</text>
-                        <text class="timeline-label" id="label1b" x="40" y="70" text-anchor="middle">Церемония</text>
-                        <text class="timeline-label" id="label1c" x="40" y="86" text-anchor="middle" font-size="0.65em">в ЗАГСе</text>
-                        <circle class="timeline-dot" id="dot2" cx="180" cy="140" r="8"/>
-                        <text class="timeline-label timeline-time" id="label2a" x="180" y="120" text-anchor="middle">16:00</text>
-                        <text class="timeline-label" id="label2b" x="180" y="170" text-anchor="middle">Сбор гостей</text>
-                        <text class="timeline-label" id="label2c" x="180" y="186" text-anchor="middle" font-size="0.65em">в ресторане</text>
-                        <circle class="timeline-dot" id="dot3" cx="360" cy="260" r="8"/>
-                        <text class="timeline-label timeline-time" id="label3a" x="360" y="240" text-anchor="middle">17:00</text>
-                        <text class="timeline-label" id="label3b" x="360" y="290" text-anchor="middle">Праздничный</text>
-                        <text class="timeline-label" id="label3c" x="360" y="306" text-anchor="middle" font-size="0.65em">банкет</text>
-                        <circle class="timeline-dot" id="dot4" cx="500" cy="340" r="8"/>
-                        <text class="timeline-label timeline-time" id="label4a" x="500" y="362" text-anchor="middle">23:00</text>
-                        <text class="timeline-label" id="label4b" x="500" y="378" text-anchor="middle" font-size="0.65em">Завершение</text>
+                        <!-- Точки с увеличенным радиусом для мобильных через JavaScript или зададим class и в CSS r менять не получится, поэтому сделаем дубли с атрибутами r, но проще задать r=10 сразу, а на десктопе будет норм -->
+                        <circle class="timeline-dot" id="dot1" cx="40" cy="40" r="9"/>
+                        <text class="timeline-label timeline-time" id="label1a" x="40" y="22" text-anchor="middle">13:00</text>
+                        <text class="timeline-label" id="label1b" x="40" y="72" text-anchor="middle">Церемония</text>
+                        <text class="timeline-label" id="label1c" x="40" y="88" text-anchor="middle" font-size="0.7em">в ЗАГСе</text>
+
+                        <circle class="timeline-dot" id="dot2" cx="180" cy="140" r="9"/>
+                        <text class="timeline-label timeline-time" id="label2a" x="180" y="118" text-anchor="middle">16:00</text>
+                        <text class="timeline-label" id="label2b" x="180" y="172" text-anchor="middle">Сбор гостей</text>
+                        <text class="timeline-label" id="label2c" x="180" y="188" text-anchor="middle" font-size="0.7em">в ресторане</text>
+
+                        <circle class="timeline-dot" id="dot3" cx="360" cy="260" r="9"/>
+                        <text class="timeline-label timeline-time" id="label3a" x="360" y="238" text-anchor="middle">17:00</text>
+                        <text class="timeline-label" id="label3b" x="360" y="292" text-anchor="middle">Праздничный</text>
+                        <text class="timeline-label" id="label3c" x="360" y="308" text-anchor="middle" font-size="0.7em">банкет</text>
+
+                        <circle class="timeline-dot" id="dot4" cx="500" cy="340" r="9"/>
+                        <text class="timeline-label timeline-time" id="label4a" x="500" y="318" text-anchor="middle">23:00</text>
+                        <text class="timeline-label" id="label4b" x="500" y="334" text-anchor="middle" font-size="0.7em">Завершение</text>
                     </svg>
                 </div>
             </div>
@@ -718,7 +760,6 @@
             <div class="card">
                 <h2 class="locations-title">Локации</h2>
                 <div class="location-cards">
-                    <!-- ЗАГС -->
                     <a href="https://yandex.ru/profile/-/CPxVABzb" target="_blank" class="location-card">
                         <div class="location-photos">
                             <img class="location-photo" src="https://static.tildacdn.com/tild3933-3432-4239-b265-613539623633/image.png" alt="Фасад ЗАГСа" loading="lazy">
@@ -731,7 +772,6 @@
                             <div class="location-map-hint">📍 Нажмите, чтобы открыть в Яндекс.Картах</div>
                         </div>
                     </a>
-                    <!-- Ресторан -->
                     <a href="https://yandex.ru/maps/-/CPxVAY7I" target="_blank" class="location-card">
                         <div class="location-photos">
                             <img class="location-photo" src="https://images.cdn-cian.ru/images/2860773302-1.jpg" alt="Фасад ресторана" loading="lazy">
@@ -759,7 +799,7 @@
         <!-- ═══ ДРЕСС-КОД ═══ -->
         <section class="section dress-code-section" id="section4">
             <div class="card">
-                <h2 class="timeline-title">Дресс-код для девушек</h2>
+                <h2 class="timeline-title">Дресс-код</h2>
                 <p class="dress-code-text">
                     Нам будет приятно, если вы поддержите цветовую гамму торжества и выберете наряды в соответствии с цветовой палитрой нашей свадьбы.
                 </p>
@@ -793,7 +833,7 @@
                 <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 1.1em;">
                     Пожалуйста, подтвердите ваше присутствие до <strong>13 июля</strong>
                 </p>
-                <a href="https://forms.yandex.ru/u/6a3072f2eb61460e2c10f825" class="rsvp-btn" id="rsvpButton">Подтвердить участие</a>
+                <a href="https://forms.yandex.ru/..." class="rsvp-btn" id="rsvpButton">Подтвердить участие</a>
             </div>
         </section>
 
@@ -824,18 +864,21 @@
     </div>
 
     <script>
-        // Параллакс
+        // Параллакс только на десктопе
+        const isMobile = window.matchMedia('(max-width: 600px)').matches;
         const parallaxFlowers = document.querySelectorAll('.parallax-flower');
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 20;
-            const y = (e.clientY / window.innerHeight - 0.5) * 20;
-            parallaxFlowers.forEach((flower, i) => {
-                const speed = (i + 1) * 0.6;
-                flower.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+        if (!isMobile) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                parallaxFlowers.forEach((flower, i) => {
+                    const speed = (i + 1) * 0.6;
+                    flower.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+                });
             });
-        });
+        }
 
-        // Лепестки
+        // Лепестки (уменьшено количество и частота на мобильных)
         const petalsContainer = document.getElementById('petalsContainer');
         const petalEmojis = ['🌸', '💮', '🌺', '🌷', '✿', '🌼', '🍂', '🌿'];
         function createPetal() {
@@ -850,10 +893,13 @@
             petalsContainer.appendChild(petal);
             setTimeout(() => { petal.remove(); }, 15000);
         }
-        for (let i = 0; i < 12; i++) setTimeout(createPetal, i * 800);
-        setInterval(createPetal, 3000);
 
-        // Появление секций
+        const petalInterval = isMobile ? 5000 : 3000; // реже на телефонах
+        const initialPetals = isMobile ? 5 : 12;
+        for (let i = 0; i < initialPetals; i++) setTimeout(createPetal, i * 800);
+        setInterval(createPetal, petalInterval);
+
+        // Появление секций (раннее срабатывание)
         const sections = document.querySelectorAll('.section');
         const branchDividers = document.querySelectorAll('.branch-divider');
         const observer = new IntersectionObserver((entries) => {
@@ -863,7 +909,7 @@
                     if (entry.target.id === 'section2') animateTimeline();
                 }
             });
-        }, { rootMargin: '0px 0px -80px 0px', threshold: 0.15 });
+        }, { rootMargin: '0px 0px -40px 0px', threshold: 0.1 });
 
         sections.forEach(s => observer.observe(s));
         branchDividers.forEach(d => observer.observe(d));
@@ -874,8 +920,8 @@
             const labels = document.querySelectorAll('.timeline-label');
             if (!curve.classList.contains('animated')) {
                 curve.classList.add('animated');
-                dots.forEach((dot, i) => setTimeout(() => dot.classList.add('visible'), 400 + i * 500));
-                labels.forEach((l, i) => setTimeout(() => l.classList.add('visible'), 500 + i * 300));
+                dots.forEach((dot, i) => setTimeout(() => dot.classList.add('visible'), 300 + i * 400));
+                labels.forEach((l, i) => setTimeout(() => l.classList.add('visible'), 400 + i * 250));
             }
         }
 
@@ -902,7 +948,6 @@
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
-
     </script>
 </body>
 </html>
