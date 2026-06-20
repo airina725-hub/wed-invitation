@@ -549,6 +549,27 @@ html, body {
     </div>
 
     <script>
+        // Принудительно светлая тема для Samsung и других браузеров
+    (function() {
+        // Устанавливаем светлую тему при загрузке
+        document.documentElement.style.setProperty('color-scheme', 'light only');
+        document.body.style.setProperty('color-scheme', 'light only');
+        
+        // Переопределяем медиа-запрос тёмной темы
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+            document.documentElement.style.setProperty('color-scheme', 'light only');
+            document.body.style.setProperty('color-scheme', 'light only');
+        });
+        
+        // Дополнительная защита для Samsung Internet
+        setInterval(function() {
+            if (document.documentElement.style.colorScheme !== 'light only') {
+                document.documentElement.style.setProperty('color-scheme', 'light only');
+                document.body.style.setProperty('color-scheme', 'light only');
+            }
+        }, 500);
+    })();
+
         // Параллакс только на десктопе
         const isMobile = window.matchMedia('(max-width: 600px)').matches;
         const parallaxFlowers = document.querySelectorAll('.parallax-flower');
@@ -637,14 +658,6 @@ html, body {
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
-        
- // Принудительно светлая тема для Samsung
-        if (window.matchMedia) {
-            const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            darkModeQuery.addEventListener('change', () => {
-                document.documentElement.style.setProperty('color-scheme', 'light only');
-            });
-        }  
     </script>
 </body>
 </html>
